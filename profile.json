@@ -1,0 +1,42 @@
+{
+  "profile": "api-authorization",
+  "version": "0.1",
+  "title": "API Authorization Profile",
+  "description": "A jurisdiction-neutral, two-tier, machine-checkable profile for securing APIs with OAuth 2.1 and FAPI 2.0. Generalized from the German federal API authorization Sicherheitsvorgaben.",
+  "homepage": "https://apicommons.org/api-authorization",
+  "ruleset": "@api-common/spectral-api-authorization-ruleset",
+  "license": "Apache-2.0",
+  "owner": "API Commons",
+  "tiers": {
+    "normal": { "groundedIn": ["RFC 9700", "OAuth 2.1"], "for": "the default baseline for any API using OAuth" },
+    "high": { "groundedIn": ["FAPI 2.0 Security Profile"], "supersetOf": "normal", "for": "high-assurance, cross-boundary, or M2M-at-scale APIs" }
+  },
+  "targets": {
+    "openapi": "OpenAPI 3.x document",
+    "oauth-metadata": "OAuth 2.0 Authorization Server Metadata (RFC 8414)"
+  },
+  "requirements": [
+    { "id": "TLS-1", "tier": "normal", "target": ["openapi", "oauth-metadata"], "keyword": "MUST", "grounding": "RFC 9700 §2.6; OAuth 2.1 §1.7", "statement": "All endpoints use https.", "rules": ["authz-transport-https-servers", "authz-oauth2-https-urls", "authz-meta-issuer-https"] },
+    { "id": "GRANT-1", "tier": "normal", "target": ["openapi", "oauth-metadata"], "keyword": "MUST NOT", "grounding": "OAuth 2.1; RFC 9700 §2.1.2", "statement": "The implicit grant / token response type is not offered.", "rules": ["authz-grant-no-implicit", "authz-meta-no-implicit-response-type"] },
+    { "id": "GRANT-2", "tier": "normal", "target": ["openapi", "oauth-metadata"], "keyword": "MUST NOT", "grounding": "OAuth 2.1; RFC 9700 §2.4", "statement": "The resource-owner password grant is not offered.", "rules": ["authz-grant-no-password", "authz-meta-grant-no-password"] },
+    { "id": "GRANT-3", "tier": "normal", "target": ["openapi"], "keyword": "MUST", "grounding": "OAuth 2.1 §1.3", "statement": "OAuth2 flows are limited to authorizationCode and clientCredentials.", "rules": ["authz-grant-types-allowed"] },
+    { "id": "RESP-1", "tier": "high", "target": ["oauth-metadata"], "keyword": "MUST", "grounding": "FAPI 2.0 §5.3", "statement": "response_types_supported is code only.", "rules": ["authz-meta-response-types-code-only"] },
+    { "id": "ISS-1", "tier": "high", "target": ["oauth-metadata"], "keyword": "MUST", "grounding": "RFC 9207; FAPI 2.0", "statement": "Authorization-response iss parameter is supported.", "rules": ["authz-meta-iss-parameter"] },
+    { "id": "PKCE-1", "tier": "normal", "target": ["oauth-metadata"], "keyword": "SHOULD", "grounding": "RFC 9700 §2.1.1; RFC 7636", "statement": "PKCE is supported.", "rules": ["authz-meta-pkce-s256"] },
+    { "id": "PKCE-2", "tier": "high", "target": ["oauth-metadata"], "keyword": "MUST", "grounding": "FAPI 2.0 §5.3; RFC 7636", "statement": "PKCE with S256 is supported.", "rules": ["authz-meta-pkce-s256"] },
+    { "id": "CAUTH-1", "tier": "high", "target": ["oauth-metadata"], "keyword": "MUST", "grounding": "FAPI 2.0 §5.3; RFC 7523; RFC 8705", "statement": "Client auth uses private_key_jwt or mTLS.", "rules": ["authz-meta-client-auth-strong"] },
+    { "id": "CAUTH-2", "tier": "high", "target": ["oauth-metadata"], "keyword": "MUST NOT", "grounding": "FAPI 2.0 §5.3", "statement": "Shared-secret client auth (client_secret_*) is not offered.", "rules": ["authz-meta-client-auth-no-secret"] },
+    { "id": "SC-1", "tier": "high", "target": ["oauth-metadata"], "keyword": "MUST", "grounding": "FAPI 2.0 §5.3; RFC 9449; RFC 8705", "statement": "Access tokens are sender-constrained via DPoP or mTLS.", "rules": ["authz-meta-sender-constraining"] },
+    { "id": "SC-2", "tier": "normal", "target": ["oauth-metadata"], "keyword": "SHOULD", "grounding": "RFC 9700 §2.2, §4.8", "statement": "Sender-constraining is supported.", "rules": ["authz-meta-sender-constraining"] },
+    { "id": "PAR-1", "tier": "high", "target": ["oauth-metadata"], "keyword": "MUST", "grounding": "FAPI 2.0 §5.3; RFC 9126", "statement": "PAR is required and its endpoint advertised.", "rules": ["authz-meta-par-required"] },
+    { "id": "PAR-2", "tier": "normal", "target": ["oauth-metadata"], "keyword": "MAY", "grounding": "RFC 9126", "statement": "PAR is supported.", "rules": [] },
+    { "id": "ALG-1", "tier": "normal", "target": ["oauth-metadata"], "keyword": "MUST NOT", "grounding": "RFC 9700 §2.6; RFC 8725", "statement": "The none signing algorithm is not offered.", "rules": ["authz-meta-no-none-alg"] },
+    { "id": "ALG-2", "tier": "high", "target": ["oauth-metadata"], "keyword": "MUST", "grounding": "FAPI 2.0; RFC 8725", "statement": "Asymmetric signing only; no HS*.", "rules": ["authz-meta-asym-signing"] },
+    { "id": "TOK-1", "tier": "normal", "target": ["oauth-metadata"], "keyword": "SHOULD", "grounding": "RFC 9068", "statement": "JWT access tokens follow the RFC 9068 profile.", "rules": [] },
+    { "id": "SEC-1", "tier": "normal", "target": ["openapi"], "keyword": "MUST", "grounding": "RFC 9700 §2.3; OWASP API2", "statement": "Every operation is covered by security (global or operation-level).", "rules": ["authz-global-security-defined"] },
+    { "id": "SEC-2", "tier": "normal", "target": ["openapi"], "keyword": "MUST", "grounding": "OAuth 2.1", "statement": "At least one OAuth2/OIDC security scheme is defined and referenced.", "rules": ["authz-security-schemes-defined"] },
+    { "id": "SCOPE-1", "tier": "normal", "target": ["openapi"], "keyword": "SHOULD", "grounding": "RFC 9700 §2.3", "statement": "Flows declare named scopes; operations request least-privilege scopes.", "rules": ["authz-oauth2-scopes-defined"] },
+    { "id": "AZ-META-1", "tier": "normal", "target": ["oauth-metadata"], "keyword": "SHOULD", "grounding": "RFC 8414", "statement": "The AS publishes RFC 8414 metadata.", "rules": ["authz-meta-issuer-https"] },
+    { "id": "AZ-META-2", "tier": "normal", "target": ["oauth-metadata"], "keyword": "SHOULD", "grounding": "RFC 7009; RFC 7662", "statement": "Revocation and introspection endpoints are advertised.", "rules": ["authz-meta-endpoints-present"] }
+  ]
+}
