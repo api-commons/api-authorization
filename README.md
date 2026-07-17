@@ -85,3 +85,13 @@ Complements the [OWASP ruleset](https://github.com/api-commons/spectral-owasp-ru
 ## Provenance & versioning
 
 `v0.1`. Every requirement carries its grounding clause above and in `profile.json`. Owner: API Commons. Source lineage: the German federal API authorization *Sicherheitsvorgaben* (RFC 9700 / FAPI 2.0), generalized. License: Apache-2.0.
+
+## Part of API Commons
+
+A machine-readable building block from **[API Commons](https://apicommons.org)** — open specifications and schemas for the APIs you produce and consume. See all building blocks and tools at **[apicommons.org](https://apicommons.org)** and the tools at **[apicommons.org/tools](https://apicommons.org/tools/)**.
+
+**Related building blocks**
+- [spectral-api-authorization-ruleset](https://github.com/api-commons/spectral-api-authorization-ruleset) — the executable Spectral ruleset that lints this profile at both tiers
+- [api-onboarding](https://github.com/api-commons/api-onboarding) — the onboarding descriptor that references this profile via `securityProfile`
+- [rules](https://github.com/api-commons/rules) — machine-readable governance rules across artifact types
+- [policies](https://github.com/api-commons/policies) — the business rationale behind API governance rules
