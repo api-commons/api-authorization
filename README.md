@@ -95,3 +95,10 @@ A machine-readable building block from **[API Commons](https://apicommons.org)**
 - [api-onboarding](https://github.com/api-commons/api-onboarding) — the onboarding descriptor that references this profile via `securityProfile`
 - [rules](https://github.com/api-commons/rules) — machine-readable governance rules across artifact types
 - [policies](https://github.com/api-commons/policies) — the business rationale behind API governance rules
+
+## License
+
+The artifacts in this repository — the schemas, examples, and API descriptions — are
+licensed **[CC BY-NC-SA 4.0](LICENSE)** (Attribution–NonCommercial–ShareAlike).
+
+API Commons licenses **artifacts** under CC BY-NC-SA 4.0 and **code** under Apache-2.0.
